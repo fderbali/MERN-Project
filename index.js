@@ -16,7 +16,11 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
+// check which env we are using
+const database_url = process.env.NODE_ENV === 'development' ? process.env.DATABASE_URL : process.env.CLOUD_DATABASE_URL;
+console.log("database url", database_url)
+mongoose.connect(database_url, { useNewUrlParser: true });
+
 const db = mongoose.connection;
 db.on('error', (error) => console.error(error));
 db.once('open', () => console.log('Connected to Database'));
